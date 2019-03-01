@@ -43,10 +43,10 @@
 boolean inicio = false; //controla el inicio de los Timer
 int contador = 0;
 int contador2 = 0;
-float diametro = 0.418; //diametro alambre calibre AWG26 recubrimiento doble
+float diametro = 0.439; //diametro alambre calibre AWG26 recubrimiento doble
 int longitud = 12;
-int numEspiras = 0;   //numero de espiras que digita el usuario
-int conEspiras = 104; //contador de espiras realizadas por la bobinadora
+int numEspiras = 104;   //numero de espiras que digita el usuario
+int conEspiras = 0;   //contador de espiras realizadas por la bobinadora
 long numPulsos = 0;   //Pulsos que debe dar el carro para cambiar de direccion
 float escala = 0;     //factor para la velocidad el motor2
 float cTiempo = 0;    //numero de pulsos por vuelta del motor2 (carro)
@@ -113,7 +113,7 @@ void setup() {
 void loop() {
   //Calculamos los parametros para mover los motores acorde con los
   //datos proporcionados por el usuario
-  numPulsos = (longitud * PULSOS_REV2) / AVANCE;
+  numPulsos = round((longitud * PULSOS_REV2) / AVANCE);
   cTiempo = (diametro / AVANCE) * PULSOS_REV2;
   escala = PULSOS_REV1 / cTiempo;
   
@@ -121,5 +121,27 @@ void loop() {
   float counTimer1 = round((CLOCK / FREC) * escala);
   OCR1A = counTimer1 - 1;
 
-  inicio = true;
+  if (Serial.available() > 0) {
+    char tx = Serial.read();
+    Serial.println(numPulsos);
+    if (tx == '1') {
+      inicio = true;
+      //Reiniciamos los contadores de los Timer 1 y 2 para garantizar la sincronia
+      TCNT1  = 0; //inicializa el valor del contador a 0
+      TCNT2  = 0; //inicializa el valor del contador a 0
+    }
+  }
+
+  while (inicio == true) {
+    //Serial.println(numEspiras);
+    if (conEspiras == numEspiras) {
+      Serial.print("Bobinado terminado. No. vueltas = ");
+      Serial.println(conEspiras);
+      conEspiras = 0;
+      contador2 = 0;
+      contador = 0;
+      inicio = false;
+    }
+    break;
+  }
 }

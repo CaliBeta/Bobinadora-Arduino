@@ -32,7 +32,7 @@
 #define PULSOS_REV1   400   //Numero de pulsos por revolucion1 (200*resol_microstep)
 #define PULSOS_REV2   1600  //Numero de pulsos por revolucion2 (200*resol_microstep)
 #define AVANCE        8.0   //avance husillo en mm/revolucion
-#define FREC          2000  //Frecuencia en Hz para los pulsos del motor 1
+#define FREC          2000  //Frecuencia en Hz para los pulsos del motor 1(max 3620)
 
 //Timers
 #define PRESCALER1    1     //Prescaler del Timer1

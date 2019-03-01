@@ -3,7 +3,7 @@ ISR(TIMER1_COMPA_vect) {
   if (inicio == true) {
     contador2++;
     PORTC ^= (1 << STEP2); //Cambia el estado del pin PD4 a su valor negado
-    if (contador2 == numPulsos * 1.91) {
+    if (contador2 == numPulsos * 1.92) {
       PORTC ^= (1 << DIR2);
       contador2 = 0;
     }
